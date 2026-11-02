@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPARK | المتجر الرقمي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#0b0913;--panel:#151222;--panel2:#1d1830;
+  --purple:#9868ff;--purple2:#7045d5;
+  --border:#302744;--muted:#a9a0bb;--white:#fff;
+  --green:#25d366;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Cairo,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.container{width:min(1180px,93%);margin:auto}
+header{position:sticky;top:0;z-index:10;background:#0d0a17ed;backdrop-filter:blur(15px);border-bottom:1px solid var(--border)}
+.nav{height:75px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:30px;font-weight:900;letter-spacing:1px}
+.logo span{color:var(--purple)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.btn{border:0;border-radius:12px;padding:11px 17px;font-weight:800;transition:.2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.primary{background:linear-gradient(120deg,#a77cff,#7044d8);color:white}
+.secondary{background:var(--panel2);border:1px solid var(--border);color:white}
+.green{background:var(--green);color:#06200d}
+.hero{
+  margin:35px auto 45px;padding:65px 7%;border-radius:27px;
+  border:1px solid #49336e;
+  background:radial-gradient(circle at 15% 15%,#8753e94d,transparent 38%),
+  radial-gradient(circle at 90% 90%,#4c2c9850,transparent 35%),
+  linear-gradient(130deg,#211936,#131020);
+  position:relative;overflow:hidden
+}
+.hero small{color:#c6aaff;font-weight:800;letter-spacing:2px}
+.hero h1{font-size:clamp(38px,6vw,67px);line-height:1.35;margin:12px 0}
+.hero h1 span{color:#b394ff}
+.hero p{color:var(--muted);line-height:2;max-width:590px}
+.hero .btn{display:inline-block;margin-top:15px}
+.hero-glow{position:absolute;width:230px;height:230px;border-radius:50%;background:#9868ff18;filter:blur(30px);left:-50px;bottom:-100px}
+.section-title{margin:35px 0 20px}
+.section-title h2{font-size:27px;margin:0}
+.section-title p{color:var(--muted);margin:5px 0}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:20px 0 55px}
+.category-card{
+  background:linear-gradient(145deg,#211a35,#151222);
+  border:1px solid var(--border);border-radius:18px;padding:22px 15px;
+  text-align:center;transition:.25s;cursor:pointer
+}
+.category-card:hover{transform:translateY(-5px);border-color:var(--purple);background:#211934}
+.category-icon{font-size:39px;margin-bottom:8px}
+.category-card h3{margin:5px 0;font-size:17px}
+.category-card p{font-size:12px;color:var(--muted);margin:0}
+.category-card .count{color:#b99cff;font-size:12px;margin-top:8px}
+.page{display:none;min-height:450px}
+.page.active{display:block}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:35px 0 20px}
+.page-head h2{margin:0;font-size:28px}
+.page-head p{margin:5px 0;color:var(--muted)}
+.search{background:#100d1d;color:white;border:1px solid var(--border);border-radius:11px;padding:12px 15px;width:min(350px,100%);outline:none}
+.search:focus{border-color:var(--purple)}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:50px}
+.product{background:var(--panel);border:1px solid var(--border);border-radius:17px;overflow:hidden;transition:.2s}
+.product:hover{transform:translateY(-4px);border-color:#8058c9}
+.product-art{height:140px;display:flex;align-items:center;justify-content:center;font-size:55px;background:linear-gradient(140deg,#38265e,#1c1730)}
+.product-body{padding:16px}
+.code{color:#b99cff;font-size:11px;font-weight:800}
+.product h3{margin:7px 0;font-size:18px}
+.product p{color:var(--muted);font-size:12px;line-height:1.9;min-height:45px}
+.product-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:13px}
+.price{font-size:17px;font-weight:900}
+.add{padding:9px 13px;font-size:12px}
+.empty{grid-column:1/-1;text-align:center;padding:35px;color:var(--muted);background:var(--panel);border-radius:15px}
+.back{margin:15px 0}
+.support{
+  margin:45px 0;padding:30px;border:1px solid var(--border);
+  border-radius:20px;background:linear-gradient(120deg,#1e1830,#131020);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap
+}
+.support h2{margin:0 0 5px}
+.support p{color:var(--muted);margin:0;line-height:1.8}
+.support-actions{display:flex;gap:10px;flex-wrap:wrap}
+footer{border-top:1px solid var(--border);padding:25px;text-align:center;color:var(--muted);font-size:12px;line-height:2}
+.overlay{position:fixed;inset:0;background:#000a;z-index:20;display:none}
+.overlay.show{display:block}
+.cart{
+ position:fixed;top:0;bottom:0;left:0;width:min(420px,95%);
+ z-index:21;background:var(--panel);padding:20px;
+ transform:translateX(-110%);transition:.3s;display:flex;flex-direction:column
+}
+.cart.show{transform:translateX(0)}
+.cart-head{display:flex;justify-content:space-between;align-items:center}
+.cart-head h2{margin:0}
+.close{background:none;border:0;color:white;font-size:28px}
+.cart-items{flex:1;overflow:auto;margin:20px 0}
+.cart-item{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--border)}
+.cart-item small{display:block;color:var(--muted)}
+.cart-item button{background:var(--panel2);color:white;border:1px solid var(--border);border-radius:7px;padding:3px 9px}
+.cart-total{display:flex;justify-content:space-between;padding:15px 0;border-top:1px solid var(--border);font-weight:900}
+.cart-note{font-size:11px;color:var(--muted);line-height:1.8}
+.toast{position:fixed;bottom:20px;right:50%;transform:translate(50%,100px);background:#30244c;border:1px solid #7858b5;padding:12px 20px;border-radius:12px;z-index:50;transition:.3s}
+.toast.show{transform:translate(50%,0)}
+@media(max-width:800px){
+ .categories{grid-template-columns:repeat(2,1fr)}
+ .products{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ .products{grid-template-columns:1fr}
+ .hero{padding:40px 22px}
+ .nav{height:65px}
+ .logo{font-size:25px}
+ .btn{padding:9px 12px}
+ .category-card{padding:17px 8px}
+}
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     إعدادات المتجر: عدّل الأرقام والروابط والنصوص من هنا
+====================================================== -->
+<script>
+const STORE = {
+  name: "SPARK",
+  whatsapp: "6283846604102",
+  telegram: "m_r_s.nmp",
+  currency: "ر.س",
+  supportText: "مرحبًا، أحتاج مساعدة بخصوص متجر SPARK."
+};
+
+/* =====================================================
+   المنتجات:
+   لإضافة منتج انسخ سطر منتج كامل وعدّل بياناته.
+   الأقسام الأربعة ثابتة، ويمكنك إضافة منتجات داخلها.
+   السعر بالريال السعودي.
+====================================================== */
+
+const PRODUCTS = [
+
+/* ===== القسم الأول: الاشتراكات ===== */
+{id:1,code:"SUB-001",name:"Netflix",category:"اشتراكات",price:15,emoji:"🎬",description:"اشتراك ترفيهي رقمي - مثال سعري"},
+{id:2,code:"SUB-002",name:"Shahid",category:"اشتراكات",price:12,emoji:"📺",description:"محتوى ترفيهي ومسلسلات"},
+{id:3,code:"SUB-003",name:"Disney+",category:"اشتراكات",price:15,emoji:"🏰",description:"اشتراك ترفيهي رقمي"},
+{id:4,code:"SUB-004",name:"OSN+",category:"اشتراكات",price:15,emoji:"🍿",description:"محتوى ترفيهي متنوع"},
+{id:5,code:"SUB-005",name:"Spotify",category:"اشتراكات",price:10,emoji:"🎵",description:"اشتراك موسيقي"},
+{id:6,code:"SUB-006",name:"YouTube Premium",category:"اشتراكات",price:12,emoji:"▶️",description:"خدمات YouTube المدفوعة"},
+{id:7,code:"SUB-007",name:"Crunchyroll",category:"اشتراكات",price:12,emoji:"🍥",description:"منصة أنمي"},
+{id:8,code:"SUB-008",name:"Amazon Prime",category:"اشتراكات",price:12,emoji:"📦",description:"خدمات Prime"},
+{id:9,code:"SUB-009",name:"Apple Music",category:"اشتراكات",price:12,emoji:"🎧",description:"اشتراك موسيقي"},
+{id:10,code:"SUB-010",name:"Anghami",category:"اشتراكات",price:8,emoji:"🎼",description:"اشتراك موسيقي"},
+{id:11,code:"SUB-011",name:"TOD",category:"اشتراكات",price:18,emoji:"⚽",description:"خدمات مشاهدة رياضية وترفيهية"},
+{id:12,code:"SUB-012",name:"StarzPlay",category:"اشتراكات",price:12,emoji:"⭐",description:"منصة ترفيهية"},
+{id:13,code:"SUB-013",name:"ZEE5",category:"اشتراكات",price:12,emoji:"📽️",description:"منصة مشاهدة"},
+{id:14,code:"SUB-014",name:"Canal+",category:"اشتراكات",price:15,emoji:"📡",description:"خدمة ترفيهية"},
+{id:15,code:"SUB-015",name:"Duolingo Super",category:"اشتراكات",price:12,emoji:"🦉",description:"اشتراك تعلم اللغات"},
+
+/* ===== القسم الثاني: الألعاب ===== */
+{id:16,code:"GAM-001",name:"PlayStation Gift Card",category:"ألعاب",price:20,emoji:"🎮",description:"بطاقة متجر PlayStation - قيمة تجريبية"},
+{id:17,code:"GAM-002",name:"Xbox Gift Card",category:"ألعاب",price:20,emoji:"🟩",description:"بطاقة متجر Xbox"},
+{id:18,code:"GAM-003",name:"Steam Wallet",category:"ألعاب",price:20,emoji:"💻",description:"بطاقة رصيد Steam"},
+{id:19,code:"GAM-004",name:"PUBG Mobile UC",category:"ألعاب",price:10,emoji:"🔫",description:"شحن عملة اللعبة عبر الطرق المصرح بها"},
+{id:20,code:"GAM-005",name:"Free Fire Diamonds",category:"ألعاب",price:10,emoji:"💎",description:"شحن جواهر اللعبة"},
+{id:21,code:"GAM-006",name:"Roblox Gift Card",category:"ألعاب",price:20,emoji:"🧱",description:"بطاقة Roblox"},
+{id:22,code:"GAM-007",name:"Fortnite V-Bucks",category:"ألعاب",price:20,emoji:"🪙",description:"بطاقة أو رصيد اللعبة"},
+{id:23,code:"GAM-008",name:"Nintendo eShop",category:"ألعاب",price:20,emoji:"🍄",description:"بطاقة متجر Nintendo"},
+{id:24,code:"GAM-009",name:"Riot Points",category:"ألعاب",price:20,emoji:"⚔️",description:"رصيد ألعاب Riot"},
+{id:25,code:"GAM-010",name:"Minecraft",category:"ألعاب",price:25,emoji:"⛏️",description:"منتج أو بطاقة Minecraft"},
+{id:26,code:"GAM-011",name:"Mobile Legends Diamonds",category:"ألعاب",price:10,emoji:"💠",description:"شحن ألماس اللعبة"},
+{id:27,code:"GAM-012",name:"Valorant Points",category:"ألعاب",price:20,emoji:"🎯",description:"رصيد Valorant"},
+{id:28,code:"GAM-013",name:"EA Gift Card",category:"ألعاب",price:20,emoji:"🏆",description:"بطاقة متجر EA"},
+{id:29,code:"GAM-014",name:"Genshin Impact",category:"ألعاب",price:15,emoji:"🌟",description:"شحن رصيد اللعبة"},
+{id:30,code:"GAM-015",name:"Call of Duty Points",category:"ألعاب",price:15,emoji:"🎖️",description:"شحن نقاط اللعبة"},
+
+/* ===== القسم الثالث: التطبيقات والمنصات ===== */
+{id:31,code:"APP-001",name:"TikTok Coins",category:"تطبيقات",price:10,emoji:"🎵",description:"رصيد تيك توك عبر الطرق الرسمية"},
+{id:32,code:"APP-002",name:"CapCut Pro",category:"تطبيقات",price:15,emoji:"✂️",description:"خدمة تحرير الفيديو"},
+{id:33,code:"APP-003",name:"Telegram Premium",category:"تطبيقات",price:15,emoji:"✈️",description:"اشتراك تيليجرام"},
+{id:34,code:"APP-004",name:"Snapchat+",category:"تطبيقات",price:15,emoji:"👻",description:"اشتراك سناب شات"},
+{id:35,code:"APP-005",name:"Canva Pro",category:"تطبيقات",price:15,emoji:"🎨",description:"أدوات تصميم"},
+{id:36,code:"APP-006",name:"Picsart Gold",category:"تطبيقات",price:12,emoji:"🖼️",description:"أدوات تعديل الصور"},
+{id:37,code:"APP-007",name:"VSCO",category:"تطبيقات",price:12,emoji:"📷",description:"أدوات تصوير وتحرير"},
+{id:38,code:"APP-008",name:"Lightroom",category:"تطبيقات",price:15,emoji:"🌄",description:"أدوات تحرير الصور"},
+{id:39,code:"APP-009",name:"Tinder",category:"تطبيقات",price:15,emoji:"📱",description:"خدمات التطبيق - حسب شروطه"},
+{id:40,code:"APP-010",name:"LinkedIn Premium",category:"تطبيقات",price:20,emoji:"💼",description:"خدمات مهنية مدفوعة"},
+{id:41,code:"APP-011",name:"Microsoft 365",category:"تطبيقات",price:20,emoji:"📄",description:"تطبيقات الإنتاجية"},
+{id:42,code:"APP-012",name:"Google One",category:"تطبيقات",price:15,emoji:"☁️",description:"مساحة تخزين سحابية"},
+{id:43,code:"APP-013",name:"Dropbox",category:"تطبيقات",price:15,emoji:"📁",description:"مساحة تخزين سحابية"},
+{id:44,code:"APP-014",name:"Deezer",category:"تطبيقات",price:12,emoji:"🎶",description:"خدمة موسيقية"},
+{id:45,code:"APP-015",name:"Strava",category:"تطبيقات",price:15,emoji:"🏃",description:"خدمات رياضية"},
+
+/* ===== القسم الرابع: الذكاء الاصطناعي ===== */
+{id:46,code:"AI-001",name:"ChatGPT Plus",category:"ذكاء اصطناعي",price:25,emoji:"🤖",description:"خدمات الذكاء الاصطناعي"},
+{id:47,code:"AI-002",name:"Claude Pro",category:"ذكاء اصطناعي",price:25,emoji:"🧠",description:"مساعد ذكي"},
+{id:48,code:"AI-003",name:"Gemini Advanced",category:"ذكاء اصطناعي",price:25,emoji:"✨",description:"أدوات Google AI"},
+{id:49,code:"AI-004",name:"Perplexity Pro",category:"ذكاء اصطناعي",price:20,emoji:"🔎",description:"بحث ومساعدة ذكية"},
+{id:50,code:"AI-005",name:"Midjourney",category:"ذكاء اصطناعي",price:25,emoji:"🎨",description:"توليد الصور"},
+{id:51,code:"AI-006",name:"Leonardo AI",category:"ذكاء اصطناعي",price:20,emoji:"🖌️",description:"أدوات إنشاء الصور"},
+{id:52,code:"AI-007",name:"Runway",category:"ذكاء اصطناعي",price:25,emoji:"🎥",description:"إنشاء وتحرير الفيديو"},
+{id:53,code:"AI-008",name:"ElevenLabs",category:"ذكاء اصطناعي",price:20,emoji:"🎙️",description:"أدوات الصوت"},
+{id:54,code:"AI-009",name:"Suno AI",category:"ذكاء اصطناعي",price:20,emoji:"🎹",description:"إنشاء الموسيقى"},
+{id:55,code:"AI-010",name:"Cursor Pro",category:"ذكاء اصطناعي",price:25,emoji:"⌨️",description:"مساعد برمجة"},
+{id:56,code:"AI-011",name:"GitHub Copilot",category:"ذكاء اصطناعي",price:20,emoji:"🐙",description:"مساعد برمجي"},
+{id:57,code:"AI-012",name:"Gamma",category:"ذكاء اصطناعي",price:15,emoji:"📊",description:"إنشاء العروض والمستندات"},
+{id:58,code:"AI-013",name:"Beautiful.ai",category:"ذكاء اصطناعي",price:20,emoji:"📽️",description:"إنشاء العروض التقديمية"},
+{id:59,code:"AI-014",name:"Writesonic",category:"ذكاء اصطناعي",price:20,emoji:"✍️",description:"أدوات الكتابة"},
+{id:60,code:"AI-015",name:"Notion AI",category:"ذكاء اصطناعي",price:20,emoji:"📝",description:"مساعد للإنتاجية"}
+];
+</script>
+
+<header>
+ <div class="container nav">
+  <a href="#" class="logo">SPARK<span>.</span></a>
+  <div class="nav-actions">
+   <button class="btn secondary" onclick="goHome()">الرئيسية</button>
+   <button class="btn secondary" id="openCart">السلة (<span id="cartCount">0</span>)</button>
+  </div>
+ </div>
+</header>
+
+<main class="container">
+
+<!-- الصفحة الرئيسية -->
+<section id="homePage" class="page active">
+ <div class="hero">
+  <small>WELCOME TO SPARK</small>
+  <h1>عالمك الرقمي<br><span>يبدأ من هنا.</span></h1>
+  <p>اكتشف المنتجات الرقمية والاشتراكات والألعاب وأدوات الذكاء الاصطناعي، واختر ما تحتاجه بسهولة.</p>
+  <a class="btn primary" href="#categories">اكتشف الأقسام ←</a>
+  <div class="hero-glow"></div>
+ </div>
+
+ <div class="section-title" id="categories">
+  <h2>تصفح الأقسام</h2>
+  <p>اختر القسم الذي تريد استكشاف منتجاته</p>
+ </div>
+
+ <div class="categories">
+  <div class="category-card" onclick="openCategory('اشتراكات')">
+   <div class="category-icon">🎬</div><h3>الاشتراكات</h3>
+   <p>منصات الترفيه والمشاهدة</p><div class="count">15 منتجًا</div>
+  </div>
+  <div class="category-card" onclick="openCategory('ألعاب')">
+   <div class="category-icon">🎮</div><h3>الألعاب</h3>
+   <p>بطاقات وشحن الألعاب</p><div class="count">15 منتجًا</div>
+  </div>
+  <div class="category-card" onclick="openCategory('تطبيقات')">
+   <div class="category-icon">📱</div><h3>التطبيقات</h3>
+   <p>خدمات وتطبيقات رقمية</p><div class="count">15 منتجًا</div>
+  </div>
+  <div class="category-card" onclick="openCategory('ذكاء اصطناعي')">
+   <div class="category-icon">🤖</div><h3>الذكاء الاصطناعي</h3>
+   <p>أدوات AI المتقدمة</p><div class="count">15 منتجًا</div>
+  </div>
+ </div>
+</section>
+
+<!-- صفحة القسم -->
+<section id="categoryPage" class="page">
+ <button class="btn secondary back" onclick="goHome()">← العودة للرئيسية</button>
+ <div class="page-head">
+  <div><h2 id="categoryTitle">المنتجات</h2><p id="categorySubtitle">تصفح المنتجات المتاحة</p></div>
+  <input class="search" id="search" placeholder="ابحث عن منتج أو كود...">
+ </div>
+ <div class="products" id="productsGrid"></div>
+</section>
+
+<!-- الدعم -->
+<section class="support">
+ <div>
+  <h2>تحتاج مساعدة؟</h2>
+  <p>فريق دعم SPARK جاهز لاستقبال استفساراتك ومساعدتك في طلبك.</p>
+ </div>
+ <div class="support-actions">
+  <a class="btn green" id="supportWhatsApp" target="_blank" rel="noopener">الدعم عبر واتساب</a>
+  <a class="btn secondary" id="supportTelegram" target="_blank" rel="noopener">تيليجرام</a>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <b>SPARK.</b><br>
+ المتجر الرقمي — جميع الحقوق محفوظة © 2026<br>
+ الأسعار والمنتجات المعروضة تخضع للتوفر وشروط مزودي الخدمات.
+</footer>
+
+<!-- سلة المشتريات -->
+<div class="overlay" id="overlay"></div>
+<aside class="cart" id="cart">
+ <div class="cart-head">
+  <h2>سلة المشتريات</h2>
+  <button class="close" id="closeCart">×</button>
+ </div>
+ <div class="cart-items" id="cartItems"></div>
+ <div class="cart-total"><span>الإجمالي</span><span id="cartTotal">0.00 ر.س</span></div>
+ <button class="btn green" id="checkout">إرسال الطلب عبر واتساب</button>
+ <p class="cart-note">سيتم فتح محادثة واتساب تحتوي على تفاصيل طلبك. الدفع يتم بعد تأكيد التوفر والسعر مع المتجر. هذا النموذج لا يؤكد استلام أي مبلغ إلكتروني.</p>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+let currentCategory="";
+let cart=JSON.parse(localStorage.getItem("spark_cart")||"[]");
+
+function money(n){
+ return Number(n).toFixed(2)+" "+STORE.currency;
+}
+function safe(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+function toast(msg){
+ $("toast").textContent=msg;
+ $("toast").classList.add("show");
+ setTimeout(()=>$("toast").classList.remove("show"),2200);
+}
+function saveCart(){
+ localStorage.setItem("spark_cart",JSON.stringify(cart));
+ renderCart();
+}
+function goHome(){
+ $("homePage").classList.add("active");
+ $("categoryPage").classList.remove("active");
+ currentCategory="";
+ $("search").value="";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function openCategory(cat){
+ currentCategory=cat;
+ $("homePage").classList.remove("active");
+ $("categoryPage").classList.add("active");
+ $("categoryTitle").textContent=cat;
+ $("categorySubtitle").textContent="تصفح جميع منتجات قسم "+cat;
+ $("search").value="";
+ renderProducts();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderProducts(){
+ const q=$("search").value.trim().toLowerCase();
+ const list=PRODUCTS.filter(p=>
+  p.category===currentCategory &&
+  (p.name+" "+p.code).toLowerCase().includes(q)
+ );
+ $("productsGrid").innerHTML=list.length?list.map(p=>`
+  <article class="product">
+   <div class="product-art">${safe(p.emoji)}</div>
+   <div class="product-body">
+    <span class="code">${safe(p.code)}</span>
+    <h3>${safe(p.name)}</h3>
+    <p>${safe(p.description)}</p>
+    <div class="product-foot">
+     <span class="price">${money(p.price)}</span>
+     <button class="btn primary add" data-id="${p.id}">أضف للسلة</button>
+    </div>
+   </div>
+  </article>
+ `).join(""):'<div class="empty">لا توجد منتجات مطابقة.</div>';
+}
+function addToCart(id){
+ const p=PRODUCTS.find(x=>x.id===id);
+ if(!p)return;
+ const item=cart.find(x=>x.id===id);
+ if(item)item.qty++;
+ else cart.push({id,qty:1});
+ saveCart();
+ toast("تمت إضافة "+p.name+" إلى السلة");
+}
+function changeQty(id,n){
+ const item=cart.find(x=>x.id===id);
+ if(!item)return;
+ item.qty+=n;
+ cart=cart.filter(x=>x.qty>0);
+ saveCart();
+}
+function removeItem(id){
+ cart=cart.filter(x=>x.id!==id);
+ saveCart();
+}
+function renderCart(){
+ let total=0,count=0;
+ $("cartItems").innerHTML=cart.map(item=>{
+  const p=PRODUCTS.find(x=>x.id===item.id);
+  if(!p)return "";
+  total+=p.price*item.qty;
+  count+=item.qty;
+  return `
+   <div class="cart-item">
+    <div>
+     <b>${safe(p.name)}</b>
+     <small>${safe(p.code)}</small>
+     <small>${money(p.price)} × ${item.qty}</small>
+     <div style="margin-top:7px;display:flex;gap:6px;align
