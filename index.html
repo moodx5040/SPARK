@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SPARK | المتجر الرقمي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+:root{--bg:#100d1b;--panel:#191529;--panel2:#211b35;--purple:#9665ff;--border:#352c49;--muted:#aaa1bd;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Cairo,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.container{width:min(1160px,93%);margin:auto}
+header{position:sticky;top:0;z-index:10;background:#100d1df2;border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav{height:75px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.logo{font-size:29px;font-weight:900;color:white;text-decoration:none}
+.logo span{color:var(--purple)}
+.links{display:flex;gap:25px;color:var(--muted)}
+.links a{color:inherit;text-decoration:none}
+.btn{border:0;border-radius:11px;padding:10px 17px;font-weight:800}
+.primary{background:linear-gradient(120deg,#a47aff,#7042db);color:white}
+.secondary{background:var(--panel2);color:white;border:1px solid var(--border)}
+.danger{background:#54232c;color:#ffb5bc}
+.green{background:#25d366;color:#071b0d}
+.hero{margin:35px auto 50px;padding:65px 7%;border:1px solid #49346f;border-radius:25px;background:radial-gradient(circle at 15% 20%,#7042db55,transparent 38%),linear-gradient(130deg,#211936,#151124)}
+.hero small{color:#c6aaff;font-weight:800}
+.hero h1{font-size:clamp(36px,6vw,65px);line-height:1.35;margin:12px 0}
+.hero h1 span{color:#b394ff}
+.hero p{color:var(--muted);line-height:2;max-width:550px}
+.hero a{display:inline-block;margin-top:15px;text-decoration:none}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:20px}
+.section-head h2{margin:0;font-size:28px}
+.section-head p{margin:4px 0;color:var(--muted)}
+.search,.field input,.field textarea,.field select{background:#100d1d;color:white;border:1px solid var(--border);border-radius:10px;padding:12px;outline:none}
+.search{width:min(390px,100%)}
+.search:focus,.field input:focus,.field textarea:focus{border-color:var(--purple)}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0}
+.filter{background:var(--panel);color:var(--muted);border:1px solid var(--border);padding:8px 16px;border-radius:25px}
+.filter.active{background:var(--purple);color:white}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:19px;margin-bottom:65px}
+.product{background:var(--panel);border:1px solid var(--border);border-radius:17px;overflow:hidden;transition:.2s}
+.product:hover{transform:translateY(-4px);border-color:#8058c9}
+.product-art{height:155px;display:flex;align-items:center;justify-content:center;font-size:57px;background:linear-gradient(140deg,#38265e,#1c1730)}
+.product-body{padding:17px}
+.code{color:#b99cff;font-size:12px;font-weight:800}
+.product h3{margin:7px 0;font-size:19px}
+.product p{color:var(--muted);font-size:13px;line-height:1.8;min-height:47px}
+.product-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:15px}
+.price{font-size:18px;font-weight:900}
+.empty{grid-column:1/-1;padding:40px;text-align:center;color:var(--muted);background:var(--panel);border-radius:15px}
+footer{border-top:1px solid var(--border);padding:25px;text-align:center;color:var(--muted);font-size:13px}
+.overlay{position:fixed;inset:0;background:#0009;z-index:20;display:none}
+.overlay.show{display:block}
+.cart{position:fixed;top:0;bottom:0;left:0;width:min(420px,94%);z-index:21;background:var(--panel);padding:20px;transform:translateX(-110%);transition:.3s;display:flex;flex-direction:column}
+.cart.show{transform:translateX(0)}
+.cart-head{display:flex;justify-content:space-between;align-items:center}
+.cart-head h2{margin:0}
+.close{background:none;border:0;color:white;font-size:28px}
+.cart-items{flex:1;overflow:auto;margin:20px 0}
+.cart-item{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--border)}
+.cart-item small{display:block;color:var(--muted)}
+.cart-total{display:flex;justify-content:space-between;padding:15px 0;border-top:1px solid var(--border);font-weight:900}
+.admin{display:none;padding:35px 0 65px;border-top:1px solid var(--border)}
+.admin.show{display:block}
+.admin-box{background:var(--panel);border:1px solid var(--border);border-radius:17px;padding:20px;margin:18px 0}
+.admin-box h3{margin-top:0}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.field label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%}
+.field textarea{min-height:75px;resize:vertical}
+.full-field{grid-column:1/-1}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.admin-list{display:grid;gap:10px;margin-top:15px}
+.admin-product{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel2);padding:13px;border-radius:12px}
+.admin-product small{display:block;color:var(--muted)}
+.admin-buttons{display:flex;gap:7px}
+.admin-buttons button{padding:7px 10px;font-size:12px}
+.toast{position:fixed;bottom:20px;right:50%;transform:translate(50%,100px);background:#30244c;border:1px solid #7858b5;padding:12px 20px;border-radius:12px;z-index:50;transition:.3s}
+.toast.show{transform:translate(50%,0)}
+@media(max-width:800px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}.links{display:none}}
+@media(max-width:520px){.products{grid-template-columns:1fr}.hero{padding:40px 22px}.form-grid{grid-template-columns:1fr}.full-field{grid-column:auto}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container nav">
+<a class="logo" href="#">SPARK<span>.</span></a>
+<nav class="links">
+<a href="#home">الرئيسية</a>
+<a href="#products">المنتجات</a>
+<a href="#about">عن المتجر</a>
+</nav>
+<button class="btn secondary" id="openCart">السلة (<span id="cartCount">0</span>)</button>
+</div>
+</header>
+
+<main class="container">
+<section class="hero" id="home">
+<small>WELCOME TO SPARK</small>
+<h1>كل عالمك الرقمي<br><span>في مكان واحد.</span></h1>
+<p>اكتشف الاشتراكات والأدوات والبطاقات الرقمية. اختر منتجك وأرسل طلبك مباشرة إلى واتساب.</p>
+<a class="btn primary" href="#products">تصفح المنتجات ←</a>
+</section>
+
+<section id="products">
+<div class="section-head">
+<div><h2>اكتشف المنتجات</h2><p>اختر منتجك أو ابحث باستخدام كود المنتج</p></div>
+<input class="search" id="search" placeholder="ابحث بالاسم أو الكود...">
+</div>
+<div class="filters" id="filters"></div>
+<div class="products" id="productsGrid"></div>
+</section>
+
+<section id="about" style="padding:15px 0 50px">
+<h2>عن SPARK</h2>
+<p style="color:var(--muted);line-height:2">وجهتك للمنتجات الرقمية والاشتراكات والأدوات التقنية. نعمل على توفير تجربة طلب سهلة وسريعة.</p>
+</section>
+
+<section class="admin" id="admin">
+<h2>لوحة إدارة المتجر</h2>
+<p style="color:var(--muted)">إدارة المنتجات والأسعار والأكواد والأقسام.</p>
+
+<div class="admin-box">
+<h3 id="formTitle">إضافة منتج جديد</h3>
+<div class="form-grid">
+<div class="field"><label>كود المنتج</label><input id="pCode" placeholder="SPK-1013"></div>
+<div class="field"><label>اسم المنتج</label><input id="pName" placeholder="اسم المنتج"></div>
+<div class="field"><label>القسم</label><select id="pCategory"><option>اشتراكات</option><option>ألعاب</option><option>بطاقات رقمية</option><option>ذكاء اصطناعي</option><option>أدوات إنتاجية</option><option>تصميم</option></select></div>
+<div class="field"><label>السعر بالريال</label><input id="pPrice" type="number" min="0" step=".01"></div>
+<div class="field full-field"><label>الوصف</label><textarea id="pDescription"></textarea></div>
+<div class="field full-field"><label>رمز تعبيري للمنتج</label><input id="pEmoji" placeholder="🎮"></div>
+</div>
+<div class="actions">
+<button class="btn primary" id="saveProduct">حفظ المنتج</button>
+<button class="btn secondary" id="cancelEdit" style="display:none">إلغاء التعديل</button>
+</div>
+</div>
+
+<div class="admin-box">
+<h3>قائمة المنتجات</h3>
+<input class="search" id="adminSearch" placeholder="ابحث بالاسم أو الكود...">
+<div class="admin-list" id="adminList"></div>
+</div>
+</section>
+
+<div style="text-align:center;margin:0 0 35px">
+<button class="btn secondary" id="adminToggle">فتح لوحة الإدارة</button>
+</div>
+</main>
+
+<footer>© 2026 SPARK — جميع الحقوق محفوظة</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="cart" id="cart">
+<div class="cart-head"><h2>سلة المشتريات</h2><button class="close" id="closeCart">×</button></div>
+<div class="cart-items" id="cartItems"></div>
+<div class="cart-total"><span>الإجمالي</span><span id="cartTotal">0 ر.س</span></div>
+<button class="btn green" id="checkout">إتمام الطلب عبر واتساب</button>
+<p style="font-size:11px;color:var(--muted);line-height:1.8">الدفع يتم يدويًا بعد التواصل مع المتجر.</p>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const WHATSAPP_NUMBER="9665XXXXXXXX";
+const DEFAULT_PRODUCTS=[
+{id:1,code:"SPK-1001",name:"اشتراك مساعد ذكي",category:"ذكاء اصطناعي",price:35,description:"مثال لمنتج اشتراك في أدوات الذكاء الاصطناعي.",emoji:"🤖"},
+{id:2,code:"SPK-1002",name:"باقة أدوات الذكاء الاصطناعي",category:"ذكاء اصطناعي",price:49,description:"مجموعة أدوات رقمية للإنتاجية والتعلم.",emoji:"🧠"},
+{id:3,code:"SPK-1003",name:"اشتراك ترفيهي رقمي",category:"اشتراكات",price:29,description:"نموذج لعرض اشتراك ترفيهي.",emoji:"🎬"},
+{id:4,code:"SPK-1004",name:"بطاقة ألعاب رقمية",category:"ألعاب",price:25,description:"نموذج بطاقة ألعاب رقمية.",emoji:"🎮"},
+{id:5,code:"SPK-1005",name:"رصيد ألعاب",category:"ألعاب",price:40,description:"نموذج لمنتج شحن ألعاب.",emoji:"🕹️"},
+{id:6,code:"SPK-1006",name:"بطاقة متجر رقمية",category:"بطاقات رقمية",price:50,description:"نموذج بطاقة رقمية بقيمة محددة.",emoji:"💳"},
+{id:7,code:"SPK-1007",name:"قوالب تصميم",category:"تصميم",price:19,description:"قوالب تصميم رقمية قابلة للتعديل.",emoji:"🎨"},
+{id:8,code:"SPK-1008",name:"حزمة خلفيات",category:"تصميم",price:12,description:"مجموعة خلفيات رقمية تجريبية.",emoji:"🌌"},
+{id:9,code:"SPK-1009",name:"حزمة إنتاجية",category:"أدوات إنتاجية",price:22,description:"أدوات لتنظيم المهام والعمل.",emoji:"📊"},
+{id:10,code:"SPK-1010",name:"قوالب تنظيم الدراسة",category:"أدوات إنتاجية",price:15,description:"قوالب رقمية لتنظيم المذاكرة.",emoji:"📚"},
+{id:11,code:"SPK-1011",name:"أدوات مطورين",category:"أدوات إنتاجية",price:30,description:"مجموعة موارد وأدوات للمطورين.",emoji:"💻"},
+{id:12,code:"SPK-1012",name:"حزمة موارد رقمية",category:"اشتراكات",price:45,description:"حزمة موارد رقمية متنوعة.",emoji:"⚡"}
+];
+
+const $=id=>document.getElementById(id);
+let category="الكل",editing=null;
+
+function products(){
+let data=localStorage.getItem("spark_products");
+if(!data){localStorage.setItem("spark_products",JSON.stringify(DEFAULT_PRODUCTS));return DEFAULT_PRODUCTS}
+return JSON.parse(data);
+}
+function saveProducts(data){localStorage.setItem("spark_products",JSON.stringify(data))}
+function cart(){return JSON.parse(localStorage.getItem("spark_cart")||"[]")}
+function saveCart(data){localStorage.setItem("spark_cart",JSON.stringify(data));renderCart()}
+function money(n){return Number(n).toFixed(2)+" ر.س"}
+function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
+
+function renderFilters(){
+let cats=["الكل",...new Set(products().map(p=>p.category))];
+$("filters").innerHTML=cats.map(c=>`<button class="filter ${c===category?"active":""}" data-cat="${safe(c)}">${safe(c)}</button>`).join("");
+document.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{category=b.dataset.cat;renderAll()});
+}
+function renderProducts(){
+let q=$("search").value.toLowerCase().trim();
+let list=products().filter(p=>(p.name+" "+p.code+" "+p.category).toLowerCase().includes(q)&&(category==="الكل"||p.category===category));
+$("productsGrid").innerHTML=list.length?list.map(p=>`
+<article class="product">
+<div class="product-art">${safe(p.emoji||"✦")}</div>
+<div class="product-body">
+<span class="code">${safe(p.code)} · ${safe(p.category)}</span>
+<h3>${safe(p.name)}</h3><p>${safe(p.description)}</p>
+<div class="product-foot"><span class="price">${money(p.price)}</span><button class="btn primary add" data-id="${p.id}">أضف للسلة</button></div>
+</div></article>`).join(""):'<div class="empty">لا توجد منتجات مطابقة للبحث.</div>';
+document.querySelectorAll(".add").forEach(b=>b.onclick=()=>add(Number(b.dataset.id)));
+}
+function add(id){
+let c=cart(),item=c.find(x=>x.id===id);
+if(item)item.qty++;else c.push({id,qty:1});
+saveCart(c);toast("تمت إضافة المنتج للسلة");
+}
+function renderCart(){
+let c=cart(),all=products(),total=0,count=0;
+$("cartItems").innerHTML=c.map(x=>{
+let p=all.find(y=>y.id===x.id);if(!p)return "";
+total+=p.price*x.qty;count+=x.qty;
+return `<div class="cart-item"><div><b>${safe(p.name)}</b><small>${safe(p.code)}</small><small>${money(p.price)} × ${x.qty}</small><button onclick="quantity(${p.id},-1)">−</button> ${x.qty} <button onclick="quantity(${p.id},1)">+</button></div><button onclick="removeItem(${p.id})">حذف</button></div>`;
+}).join("")||'<p style="color:var(--muted)">السلة فارغة.</p>';
+$("cartCount").textContent=count;$("cartTotal").textContent=money(total);
+}
+function quantity(id,n){let c=cart(),x=c.find(y=>y.id===id);if(x)x.qty+=n;saveCart(c.filter(y=>y.qty>0))}
+function removeItem(id){saveCart(cart().filter(x=>x.id!==id))}
+function checkout(){
+let c=cart(),all=products();
+if(!c.length)return toast("السلة فارغة");
+if(WHATSAPP_NUMBER.includes("X"))return toast("أضف رقم واتسابك في الكود أولاً");
+let total=0;
+let lines=c.map((x,i)=>{let p=all.find(y=>y.id===x.id);if(!p)return "";let sum=p.price*x.qty;total+=sum;return `${i+1}. ${p.name}\nالكود: ${p.code}\nالقسم: ${p.category}\nالسعر: ${money(p.price)}\nالكمية: ${x.qty}\nالإجمالي: ${money(sum)}`}).filter(Boolean);
+let msg=`طلب جديد من متجر SPARK\n\n${lines.join("\n\n")}\n\nالإجمالي النهائي: ${money(total)}\n\nأرجو تزويدي بطرق الدفع.`;
+window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(msg),"_blank");
+}
+function renderAdmin(){
+let q=$("adminSearch").value.toLowerCase().trim();
+let list=products().filter(p=>(p.name+" "+p.code+" "+p.category).toLowerCase().includes(q));
+$("adminList").innerHTML=list.map(p=>`<div class="admin-product"><div><b>${safe(p.name)}</b><small>${safe(p.code)} · ${safe(p.category)} · ${money(p.price)}</small></div><div class="admin-buttons"><button class="btn secondary edit" data-id="${p.id}">تعديل</button><button class="btn danger del" data-id="${p.id}">حذف</button></div></div>`).join("")||"<p>لا توجد منتجات.</p>";
+document.querySelectorAll(".edit").forEach(b=>b.onclick=()=>edit(Number(b.dataset.id)));
+document.querySelectorAll(".del").forEach(b=>b.onclick=()=>del(Number(b.dataset.id)));
+}
+function clearForm(){editing=null;["pCode","pName","pPrice","pDescription","pEmoji"].forEach(id=>$(id).value="");$("pCategory").value="اشتراكات";$("formTitle").textContent="إضافة منتج جديد";$("saveProduct").textContent="حفظ المنتج";$("cancelEdit").style.display="none"}
+function edit(id){
+let p=products().find(x=>x.id===id);if(!p)return;editing=id;
+$("pCode").value=p.code;$("pName").value=p.name;$("pCategory").value=p.category;$("pPrice").value=p.price;$("pDescription").value=p.description;$("pEmoji").value=p.emoji||"";
+$("formTitle").textContent="تعديل المنتج";$("saveProduct").textContent="حفظ التعديلات";$("cancelEdit").style.display="inline-block";
+$("admin").scrollIntoView({behavior:"smooth"});
+}
+function del(id){
+if(!confirm("هل تريد حذف المنتج؟"))return;
+saveProducts(products().filter(p=>p.id!==id));saveCart(cart().filter(x=>x.id!==id));renderAll();renderAdmin();toast("تم حذف المنتج");
+}
+function saveProduct(){
+let code=$("pCode").value.trim(),name=$("pName").value.trim(),price=Number($("pPrice").value);
+if(!code||!name||!Number.isFinite(price)||price<0)return toast("أدخل الكود والاسم والسعر بشكل صحيح");
+let data=products();
+if(data.some(p=>p.code.toLowerCase()===code.toLowerCase()&&p.id!==editing))return toast("هذا الكود مستخدم بالفعل");
+let item={id:editing||Date.now(),code,name,category:$("pCategory").value,price,description:$("pDescription").value.trim(),emoji:$("pEmoji").value.trim()||"✦"};
+if(editing)data=data.map(p=>p.id===editing?item:p);else data.push(item);
+saveProducts(data);clearForm();renderAll();renderAdmin();toast("تم حفظ المنتج");
+}
+function renderAll(){renderFilters();renderProducts();renderCart()}
+$("search").addEventListener("input",renderProducts);
+$("adminSearch").addEventListener("input",renderAdmin);
+$("saveProduct").onclick=saveProduct;
+$("cancelEdit").onclick=clearForm;
+$("checkout").onclick=checkout;
+$("openCart").onclick=()=>{$("cart").classList.add("show");$("overlay").classList.add("show")};
+function closeCart(){$("cart").classList.remove("show");$("overlay").classList.remove("show")}
+$("closeCart").onclick=closeCart;$("overlay").onclick=closeCart;
+$("adminToggle").onclick=()=>{$("admin").classList.toggle("show");$("adminToggle").textContent=$("admin").classList.contains("show")?"إغلاق لوحة الإدارة":"فتح لوحة الإدارة";renderAdmin()};
+renderAll();
+</script>
+</body>
+</html>
